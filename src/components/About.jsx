@@ -1,84 +1,134 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 export default function About() {
-  const sectionRef = useRef(null);
+  useEffect(()=>{
+    const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');})},{threshold:0.1});
+    document.querySelectorAll('.rv,.rvl,.rvr,.rvs').forEach(el=>obs.observe(el));
+    return()=>obs.disconnect();
+  },[]);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll('[data-reveal]').forEach((el, i) => {
-              setTimeout(() => {
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-              }, i * 150);
-            });
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <section id="story" ref={sectionRef} className="relative py-32 px-8 lg:px-20 bg-black overflow-hidden">
-      {/* Horizontal line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-      {/* Large background text */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 font-cormorant text-[20vw] leading-none text-white/[0.02] select-none pointer-events-none"
-        style={{ fontFamily: 'var(--font-cormorant)' }}>
-        ETHEREAL
-      </div>
-
-      <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-        {/* Left — brand statement */}
-        <div>
-          <p data-reveal className="font-montserrat text-[10px] tracking-[0.5em] uppercase text-[#c9a96e] mb-6"
-            style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.7s ease' }}>
-            Experience the Ethereal
-          </p>
-
-          <h2 data-reveal className="font-cormorant text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] font-light text-white mb-8"
-            style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.7s ease', fontFamily: 'var(--font-cormorant)' }}>
-            A fragrance<br />
-            <em>felt before</em><br />
-            it is seen.
-          </h2>
-
-          <div data-reveal className="w-12 h-px bg-[#c9a96e] mb-8"
-            style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.7s ease' }} />
-
-          <p data-reveal className="font-montserrat text-sm leading-[1.9] text-white/45 font-light max-w-md"
-            style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.7s ease' }}>
-            At Ether Element, we believe a truly exceptional fragrance is not merely worn — it is felt. Every accord in our collection is built with deliberate intention. Layered with depth. Refined to linger.
-          </p>
+  return (<>
+    {/* ── "A collection born from silence" — VELUNE split section ── */}
+    <section id="story" style={{background:'#07070c',padding:'10rem 0',overflow:'hidden'}}>
+      <div style={{maxWidth:'1200px',margin:'0 auto',padding:'0 5rem',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8rem',alignItems:'center'}}>
+        {/* Left — moody product image placeholder with glow bottle */}
+        <div className="rvl" style={{position:'relative',height:'520px',background:'#0d0d14',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}>
+          <div style={{position:'absolute',top:0,left:'50%',transform:'translateX(-50%)',
+            width:'100%',height:'100%',
+            background:'radial-gradient(ellipse 70% 80% at 50% 10%, rgba(201,169,110,0.14) 0%, transparent 70%)',
+            pointerEvents:'none'}}/>
+          <div className="flt">
+            <LargeBottle/>
+          </div>
+          {/* label overlay */}
+          <div style={{position:'absolute',bottom:'2rem',left:'2rem'}}>
+            <p style={{fontFamily:'Montserrat',fontSize:'0.5rem',letterSpacing:'0.45em',textTransform:'uppercase',color:'rgba(255,255,255,0.3)',marginBottom:'0.4rem'}}>Signature</p>
+            <p style={{fontFamily:'Georgia,serif',fontSize:'1.2rem',color:'rgba(255,255,255,0.5)',letterSpacing:'0.1em'}}>ETHER</p>
+          </div>
         </div>
+        {/* Right — italic heading like VELUNE */}
+        <div className="rvr">
+          <p style={{fontFamily:'Montserrat',fontSize:'0.55rem',letterSpacing:'0.55em',textTransform:'uppercase',color:'#c9a96e',marginBottom:'2rem'}}>Ether Element · Est. 2024</p>
+          <h2 style={{fontFamily:'Georgia,serif',fontSize:'clamp(2rem,4vw,3.2rem)',fontWeight:300,color:'#fff',lineHeight:1.2,fontStyle:'italic',marginBottom:'2rem'}}>
+            A collection<br/><em style={{color:'rgba(255,255,255,0.5)'}}>born from silence.</em>
+          </h2>
+          <div style={{width:'40px',height:'1px',background:'#c9a96e',marginBottom:'2rem'}}/>
+          <p style={{fontFamily:'Montserrat',fontSize:'0.72rem',color:'rgba(255,255,255,0.35)',lineHeight:2,marginBottom:'2.5rem',maxWidth:'340px'}}>
+            At Ether Element, we believe a truly exceptional fragrance is not merely worn — it is felt. By you. And by every person whose world you pass through.
+          </p>
+          <a href="#collection" style={{fontFamily:'Montserrat',fontSize:'0.6rem',letterSpacing:'0.35em',textTransform:'uppercase',
+            border:'1px solid rgba(201,169,110,0.45)',color:'#c9a96e',padding:'13px 32px',display:'inline-block',
+            cursor:'none',transition:'all 0.4s'}}
+            onMouseEnter={e=>{e.target.style.background='#c9a96e';e.target.style.color='#000';}}
+            onMouseLeave={e=>{e.target.style.background='transparent';e.target.style.color='#c9a96e';}}>
+            Discover the Pieces →
+          </a>
+        </div>
+      </div>
+    </section>
 
-        {/* Right — 3 pillars */}
-        <div className="flex flex-col gap-1">
+    {/* ── Moody quote section ── */}
+    <section className="qbg" style={{padding:'10rem 5rem',display:'flex',alignItems:'center',justifyContent:'center',minHeight:'55vh',position:'relative',overflow:'hidden'}}>
+      <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%)',pointerEvents:'none'}}/>
+      <div style={{maxWidth:'700px',textAlign:'center',position:'relative',zIndex:1}}>
+        <p className="rv d1" style={{fontFamily:'Montserrat',fontSize:'0.55rem',letterSpacing:'0.55em',textTransform:'uppercase',color:'#c9a96e',marginBottom:'2.5rem'}}>Ether Element · Ahmedabad · India</p>
+        <blockquote className="rv d2" style={{fontFamily:'Georgia,serif',fontStyle:'italic',fontSize:'clamp(1.5rem,3.5vw,2.6rem)',fontWeight:300,color:'#fff',lineHeight:1.35}}>
+          "We don't make perfume.{' '}
+          <span style={{color:'rgba(255,255,255,0.4)'}}>We make your presence."</span>
+        </blockquote>
+        <div className="rv d3" style={{width:'48px',height:'1px',background:'#c9a96e',margin:'2.5rem auto 0'}}/>
+      </div>
+    </section>
+
+    {/* ── Ateliers grid — VELUNE style ── */}
+    <section style={{background:'#06060a',padding:'8rem 0'}}>
+      <div style={{maxWidth:'1200px',margin:'0 auto',padding:'0 5rem'}}>
+        <div style={{marginBottom:'4rem'}}>
+          <p className="rv d1" style={{fontFamily:'Montserrat',fontSize:'0.55rem',letterSpacing:'0.55em',textTransform:'uppercase',color:'#c9a96e',marginBottom:'0.75rem'}}>The Philosophy</p>
+          <h2 className="rv d2" style={{fontFamily:'Georgia,serif',fontSize:'clamp(2rem,4.5vw,3.8rem)',fontWeight:300,color:'#fff'}}>The Ateliers</h2>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.75rem'}}>
           {[
-            { num: '01', title: 'Deliberate', desc: 'Every accord built with intention. No note is accidental.' },
-            { num: '02', title: 'Layered', desc: 'Depth that unfolds — from first spritz to lasting echo.' },
-            { num: '03', title: 'Eternal', desc: 'Between the darkest hour and the softest morning.' },
-          ].map((item, i) => (
-            <div key={item.num} data-reveal
-              className="group flex gap-6 p-6 border-b border-white/5 hover:border-[#c9a96e]/20 transition-all duration-500 cursor-default"
-              style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.7s ease' }}>
-              <span className="font-montserrat text-xs text-[#c9a96e]/40 group-hover:text-[#c9a96e] transition-colors pt-1">{item.num}</span>
-              <div>
-                <h3 className="font-cormorant text-2xl text-white/80 group-hover:text-white transition-colors mb-1"
-                  style={{ fontFamily: 'var(--font-cormorant)' }}>{item.title}</h3>
-                <p className="font-montserrat text-xs text-white/30 leading-relaxed">{item.desc}</p>
-              </div>
+            {n:'01',t:'Deliberate',d:'Every accord built with intention.',span:'span 2',h:'320px'},
+            {n:'02',t:'Layered',d:'Depth that unfolds from first spritz.',span:'span 1',h:'320px'},
+            {n:'03',t:'Refined',d:'Lingers on skin for hours.',span:'span 1',h:'320px'},
+            {n:'04',t:'Eternal',d:'Between the darkest hour and the softest morning.',span:'span 2',h:'200px'},
+            {n:'05',t:'Felt',d:'The finest things felt before they are seen.',span:'span 2',h:'200px'},
+          ].map((item,i)=>(
+            <div key={item.n} className="rv rvs" style={{gridColumn:item.span,height:item.h,transitionDelay:`${i*0.1}s`,
+              background:'#0e0e14',border:'1px solid rgba(255,255,255,0.04)',
+              padding:'2rem',display:'flex',flexDirection:'column',justifyContent:'flex-end',
+              position:'relative',overflow:'hidden',cursor:'none'}}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(201,169,110,0.2)';}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(255,255,255,0.04)';}}>
+              <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,169,110,0.06) 0%, transparent 70%)',opacity:0,transition:'opacity 0.5s',pointerEvents:'none'}}
+                className="atelier-glow"/>
+              <span style={{fontFamily:'Montserrat',fontSize:'0.5rem',letterSpacing:'0.4em',color:'rgba(201,169,110,0.4)',marginBottom:'0.75rem'}}>{item.n}</span>
+              <h3 style={{fontFamily:'Georgia,serif',fontSize:'1.6rem',fontWeight:300,color:'#fff',marginBottom:'0.5rem'}}>{item.t}</h3>
+              <p style={{fontFamily:'Montserrat',fontSize:'0.65rem',color:'rgba(255,255,255,0.22)',lineHeight:1.7}}>{item.d}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
+  </>);
+}
+
+function LargeBottle() {
+  return (
+    <svg width="120" height="280" viewBox="0 0 160 360" fill="none"
+      style={{filter:'drop-shadow(0 0 40px rgba(201,169,110,0.2)) drop-shadow(0 30px 60px rgba(0,0,0,0.9))'}}>
+      <defs>
+        <linearGradient id="lb" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#101010"/><stop offset="50%" stopColor="#282828"/><stop offset="100%" stopColor="#101010"/>
+        </linearGradient>
+        <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="transparent"/><stop offset="50%" stopColor="#c9a96e"/><stop offset="100%" stopColor="transparent"/>
+        </linearGradient>
+        <linearGradient id="ls" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="transparent"/>
+          <stop offset="48%" stopColor="rgba(255,255,255,0.05)"/>
+          <stop offset="55%" stopColor="rgba(255,255,255,0.17)"/>
+          <stop offset="100%" stopColor="transparent"/>
+        </linearGradient>
+      </defs>
+      <rect x="76" y="0"   width="8"   height="7"   rx="2"   fill="#1a1a1a"/>
+      <rect x="52" y="8"   width="56"  height="56"  rx="4"   fill="url(#lb)"/>
+      <rect x="52" y="8"   width="56"  height="56"  rx="4"   fill="url(#ls)"/>
+      <rect x="48" y="60"  width="64"  height="8"   rx="2"   fill="#0d0d0d"/>
+      <rect x="62" y="68"  width="36"  height="26"           fill="#141414"/>
+      <rect x="62" y="68"  width="36"  height="26"           fill="url(#ls)"/>
+      <path d="M38 94L62 94L62 108Q80 114 98 108L98 94L122 94L122 112Q80 124 38 112Z" fill="#141414"/>
+      <rect x="28" y="110" width="104" height="216" rx="6"   fill="url(#lb)"/>
+      <rect x="28" y="110" width="104" height="216" rx="6"   fill="url(#ls)"/>
+      <rect x="28" y="110" width="104" height="3"            fill="url(#lg2)" opacity="0.7"/>
+      <rect x="35" y="140" width="90"  height="136" rx="2"   fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.5"/>
+      <text x="80" y="194" textAnchor="middle" fill="white" fontSize="13" fontFamily="Georgia,serif" letterSpacing="5" opacity="0.9">ETHER</text>
+      <line x1="48" y1="202" x2="112" y2="202" stroke="url(#lg2)" strokeWidth="0.6"/>
+      <text x="80" y="214" textAnchor="middle" fill="white" fontSize="5" fontFamily="sans-serif" letterSpacing="4.5" opacity="0.35">ELEMENT</text>
+      <rect x="28" y="322" width="104" height="8" rx="3" fill="#0a0a0a"/>
+      <rect x="34" y="113" width="6" height="207" rx="3" fill="rgba(255,255,255,0.04)"/>
+    </svg>
   );
 }
